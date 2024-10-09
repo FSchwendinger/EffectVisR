@@ -18,3 +18,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/FSchwendinger/effect.size.wiz
+BugReports: https://github.com/FSchwendinger/effect.size.wiz/issues
