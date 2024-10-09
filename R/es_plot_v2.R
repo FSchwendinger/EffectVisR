@@ -91,7 +91,7 @@ es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
 
     # Add an arrow to represent the effect size with user-defined color
     ggplot2::annotate("segment", x = 0, y = 0, xend = cos(angle), yend = sin(angle),
-                      linewidth = 2.5, color = arrow_color) +  # Thicker segment for needle
+                      size = 2.5, color = arrow_color) +  # Thicker segment for needle
     ggplot2::annotate("point", x = cos(angle), y = sin(angle),
                       size = 5, color = arrow_color, shape = 21, fill = "white") +  # Circle at the tip
 
@@ -110,7 +110,7 @@ es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
     ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = "\u2264 -1", vjust = 2, size = axis_label_size) +  # -90° -> -1
 
     # Line at x = 0
-    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", linewidth = 1) +
+    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", size = 1) +
 
     expand_limits(x = c(-1.2, 1.2), y = c(-1.2, 1.2)) +
 
