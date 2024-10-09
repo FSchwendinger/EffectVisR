@@ -62,12 +62,7 @@ effect.size.wiz::es_plot_v1(
   palette = "viridis",
   arrow_color = "black"
 )
-#> Warning in ggplot2::annotate("text", x = cos(pi/2), y =
-#> sin(pi/2), label = "≥ 1", : Ignoring unknown parameters:
-#> `linewidth`
 ```
-
-<img src="man/figures/README-unnamed-chunk-2-1.png" width="100%" />
 
 This will produce a plot like the following.
 
@@ -99,8 +94,6 @@ effect.size.wiz::es_plot_v2(
   arrow_color = "darkred"
 )
 ```
-
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
 
 This will produce a plot like the following.
 
@@ -145,12 +138,7 @@ effect.size.wiz::es_plot_v1(
   arrow_color = "black",
   save_path = "effect_size_plot.png"
 )
-#> Warning in ggplot2::annotate("text", x = cos(pi/2), y =
-#> sin(pi/2), label = "≥ 1", : Ignoring unknown parameters:
-#> `linewidth`
 ```
-
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
 
 ## License
 

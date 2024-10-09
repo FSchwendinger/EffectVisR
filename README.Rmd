@@ -47,7 +47,7 @@ library(effect.size.wiz)
 
 The `es_plot_v1` function creates a plot with a gradient showing confidence intervals around an effect size. It highlights the range of possible effect sizes (95% CI) using colour gradients, with different colours for positive and negative effect sizes.
 
-```{r}
+```{r, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
 library(effect.size.wiz)
 
 # Define the effect size and confidence intervals
@@ -73,7 +73,7 @@ This will produce a plot like the following.
 
 The `es_plot_v2` function generates a plot with shading that highlights the confidence interval range and how close it is to the effect size. Darker colours within the 95% CI show that the values are close to the estimate, while lighter colours are further away.
 
-```{r}
+```{r, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
 # Define effect size and confidence intervals
 effect_size <- -0.3
 ci_lower <- -0.6
@@ -113,7 +113,7 @@ Both functions (`es_plot_v1` and `es_plot_v2`) allow you to adjust several param
 
 You can save your plot with a transparent background using the `save_path` argument.
 
-```{r}
+```{r, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
 effect.size.wiz::es_plot_v1(
   effect_size = 0.4,
   ci_lower = 0.1,
