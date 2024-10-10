@@ -10,7 +10,8 @@
 
 \item{ci_upper}{Numeric, the upper bound of the 95\% confidence interval.}
 
-\item{palette}{Character, color palette to use for the confidence range. Options are "viridis" or "grey".}
+\item{palette}{Character, color palette to use for the confidence range. Options are
+"viridis", "magma", "plasma", "cividis", or "grey".}
 
 \item{arrow_color}{Character, color for the arrow indicating the effect size.}
 
@@ -30,4 +31,32 @@ Creates a plot showing an arrow representing an effect size, with a colored rang
 representing the 95\% confidence interval (CI). The color transition is smooth across the CI,
 and a dashed white line separates positive and negative effects. The plot provides a clear
 visual summary of the effect size and its confidence range.
+}
+\examples{
+# Example usage of es_plot_v1
+library(EffectVisR)
+
+# Define the effect size and confidence intervals
+effect_size <- 0.4
+ci_lower <- 0.1
+ci_upper <- 0.7
+
+# Create the plot using the "viridis" color palette
+EffectVisR::es_plot_v1(
+  effect_size = effect_size,
+  ci_lower = ci_lower,
+  ci_upper = ci_upper,
+  palette = "viridis",
+  arrow_color = "black"
+)
+
+# Create the plot using the "magma" color palette and save the plot
+EffectVisR::es_plot_v1(
+  effect_size = 0.4,
+  ci_lower = 0.1,
+  ci_upper = 0.7,
+  palette = "magma",
+  arrow_color = "black",
+  save_path = "effect_size_plot.png"
+)
 }
