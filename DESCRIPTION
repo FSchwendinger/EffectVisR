@@ -3,7 +3,7 @@ Title: Customisable Effect Size Plots with Confidence Intervals for Scientific P
 Version: 0.0.0.9000
 Authors@R: c(
     person(given = "Fabian", family = "Schwendinger", email = "schwendinger.fabian@gmail.com", role = c("aut", "cre")),
-    person(given = "Eric", family = "Lichtenstein", email = "eric.lichtenstein@unibas.ch", role = "aut")
+    person(given = "Eric", family = "Lichtenstein", email = "e.lichtenstein@unibas.ch", role = "aut")
     )
 Description: This package provides functions to create customized effect size plots, visualizing confidence intervals with a speedometer-like design. It simplifies the interpretation of effect sizes in relation to their confidence intervals.
 License: LGPL-3
