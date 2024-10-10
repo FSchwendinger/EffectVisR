@@ -56,7 +56,7 @@
 utils::globalVariables(c("x", "y", "z"))
 
 es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
-                             arrow_color = "black", save_path = NULL,
+                             arrow_color = "black", reverse = FALSE, save_path = NULL,
                              axis_title_size = 12, axis_label_size = 10) {
 
   # Helper function to cap effect sizes and CIs within -1 to 1 range
