@@ -11,7 +11,8 @@
 #' @param effect_size Numeric, the estimated effect size.
 #' @param ci_lower Numeric, the lower bound of the 95% confidence interval.
 #' @param ci_upper Numeric, the upper bound of the 95% confidence interval.
-#' @param palette Character, color palette to use for the confidence range. Options are "viridis" or "grey".
+#' @param palette Character, color palette to use for the confidence range. Options are
+#'   "viridis", "magma", "plasma", "cividis", or "grey".
 #' @param arrow_color Character, color for the arrow indicating the effect size.
 #' @param save_path Character, path to save the plot. If NULL, the plot will not be saved.
 #' @param axis_title_size Numeric, font size for the axis title.
@@ -24,6 +25,33 @@
 #' @return A ggplot2 object.
 #' @name es_plot_v1
 #' @export
+#' @examples
+#' # Example usage of es_plot_v1
+#' library(EffectVisR)
+#'
+#' # Define the effect size and confidence intervals
+#' effect_size <- 0.4
+#' ci_lower <- 0.1
+#' ci_upper <- 0.7
+#'
+#' # Create the plot using the "viridis" color palette
+#' EffectVisR::es_plot_v1(
+#'   effect_size = effect_size,
+#'   ci_lower = ci_lower,
+#'   ci_upper = ci_upper,
+#'   palette = "viridis",
+#'   arrow_color = "black"
+#' )
+#'
+#' # Create the plot using the "magma" color palette and save the plot
+#' EffectVisR::es_plot_v1(
+#'   effect_size = 0.4,
+#'   ci_lower = 0.1,
+#'   ci_upper = 0.7,
+#'   palette = "magma",
+#'   arrow_color = "black",
+#'   save_path = "effect_size_plot.png"
+#' )
 
 utils::globalVariables(c("x", "y", "z"))
 
@@ -57,11 +85,14 @@ es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
 
   # Function to get the color palette based on user input
   get_palette <- function(palette, n) {
-    if (palette == "grey") {
-      return(grDevices::gray.colors(n))
-    } else {
-      return(viridisLite::viridis(n))
-    }
+    switch(palette,
+           "viridis" = viridisLite::viridis(n, option = "viridis", direction = ifelse(reverse, -1, 1)),
+           "magma" = viridisLite::viridis(n, option = "magma", direction = ifelse(reverse, -1, 1)),
+           "plasma" = viridisLite::viridis(n, option = "plasma", direction = ifelse(reverse, -1, 1)),
+           "cividis" = viridisLite::viridis(n, option = "cividis", direction = ifelse(reverse, -1, 1)),
+           "grey" = grDevices::gray.colors(n, start = ifelse(reverse, 0.9, 0.1), end = ifelse(reverse, 0.1, 0.9)),
+           viridisLite::viridis(n)  # Default palette if none is specified
+    )
   }
 
   # Apply a gradient across the entire range but only show within the CI

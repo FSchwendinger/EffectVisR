@@ -11,13 +11,13 @@
 #' @param effect_size Numeric, the estimated effect size.
 #' @param ci_lower Numeric, the lower bound of the 95% confidence interval.
 #' @param ci_upper Numeric, the upper bound of the 95% confidence interval.
-#' @param palette Character, color palette to use for the confidence range. Options are "viridis" or "grey".
+#' @param palette Character, color palette to use for the confidence range. Options are
+#'   "viridis", "magma", "plasma", "cividis", or "grey".
 #' @param arrow_color Character, color for the arrow indicating the effect size.
 #' @param save_path Character, path to save the plot. If NULL, the plot will not be saved.
 #' @param axis_title_size Numeric, font size for the axis title.
 #' @param axis_label_size Numeric, font size for the axis labels.
 #' @param reverse Logical, whether to reverse the color scale (default is FALSE).
-
 #'
 #' @import ggplot2
 #' @importFrom viridisLite viridis
@@ -25,6 +25,33 @@
 #' @return A ggplot2 object.
 #' @name es_plot_v2
 #' @export
+#' @examples
+#' # Example usage of es_plot_v2
+#' library(EffectVisR)
+#'
+#' # Define the effect size and confidence intervals
+#' effect_size <- -0.3
+#' ci_lower <- -0.6
+#' ci_upper <- -0.1
+#'
+#' # Create the plot using the "grey" color palette
+#' EffectVisR::es_plot_v2(
+#'   effect_size = effect_size,
+#'   ci_lower = ci_lower,
+#'   ci_upper = ci_upper,
+#'   palette = "grey",
+#'   arrow_color = "darkred"
+#' )
+#'
+#' # Create the plot using the "plasma" color palette and save the plot
+#' EffectVisR::es_plot_v2(
+#'   effect_size = -0.3,
+#'   ci_lower = -0.6,
+#'   ci_upper = -0.1,
+#'   palette = "plasma",
+#'   arrow_color = "darkred",
+#'   save_path = "effect_size_plot_v2.png"
+#' )
 
 
 utils::globalVariables(c("x", "y", "z"))
