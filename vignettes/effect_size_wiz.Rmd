@@ -1,9 +1,9 @@
 ---
-title: "Visualizing Effect Sizes and Confidence Intervals with effect.size.wiz"
+title: "Visualising effect sizes and confidence intervals with EffectVisR"
 author: "Fabian Schwendinger & Eric Lichtenstein"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Effect Size Visualization with effect.size.wiz}
+  %\VignetteIndexEntry{Effect size visualisation with EffectVisR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,9 +17,10 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The **effect.size.wiz** package provides tools for visualizing effect sizes and their 95% confidence intervals in a clear and intuitive way. It includes two main plotting functions, `es_plot_v1` and `es_plot_v2`, which generate visualizations with color-coded confidence intervals and customizable design options such as color palettes, label fonts, and more.
+The **EffectVisR** package provides tools for visualising effect sizes and their 95% confidence intervals in a clear and intuitive way. It includes two main plotting functions, `es_plot_v1` and `es_plot_v2`, which generate visualisations with color-coded confidence intervals and customisable design options such as color palettes, label fonts, and more.
 
-This vignette will guide you through how to use the functions in the package to create compelling visualizations for effect sizes and confidence intervals.
+This vignette will guide you through how to use the functions in the package to create compelling visualisations for effect sizes and confidence intervals.
+
 
 ## Features of the Package
 
@@ -31,33 +32,35 @@ The package supports:
 
 -   Speedometer-like arrows to indicate the estimated effect size.
 
--   Customizable axis labels, font sizes, and export options for the plots.
+-   Customisable axis labels, font sizes, and export options for the plots.
 
 ## Prerequisites
 
-You need to install the **effect.size.wiz** package to use its functionality.
+You need to install the **EffectVisR** package to use its functionality.
 
 ## Installation
 
 To install the package, use the following commands in R:
 
-`install.packages("remotes")remotes::install_github("FSchwendinger/effect.size.wiz")`
+`install.packages("remotes")`
+
+`remotes::install_github("FSchwendinger/EffectVisR")`
 
 After the installation is complete, load the package:
 
 ```{r load_package, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
 
-library(effect.size.wiz)
+library(EffectVisR)
 ```
 
 ## Usage of `es_plot_v1`
 
-The `es_plot_v1` function creates a plot that visualizes effect sizes and their 95% confidence intervals using a color-coded gradient.
+The `es_plot_v1` function creates a plot that visualises effect sizes and their 95% confidence intervals using a color-coded gradient.
 
 Function Syntax:
 
 ```{r es_plot_v1, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
-effect.size.wiz::es_plot_v1(
+EffectVisR::es_plot_v1(
   effect_size,
   ci_lower,
   ci_upper,
@@ -74,7 +77,7 @@ effect.size.wiz::es_plot_v1(
 Let's create a simple plot using `es_plot_v1`.
 
 ```{r es_plot_v1 example, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
-library(effect.size.wiz)
+library(EffectVisR)
 
 # Define the effect size and confidence intervals
 effect_size <- 0.4
@@ -82,7 +85,7 @@ ci_lower <- 0
 ci_upper <- 0.8
 
 # Create the plot
-effect.size.wiz::es_plot_v1(
+EffectVisR::es_plot_v1(
   effect_size,
   ci_lower,
   ci_upper,
@@ -117,7 +120,7 @@ The `es_plot_v2` function adds a gradient shading within the 95% confidence inte
 Function Syntax:
 
 ```{r es_plot_v2, message = FALSE, warning = FALSE, echo = TRUE, eval = F}
-effect.size.wiz::es_plot_v2(
+EffectVisR::es_plot_v2(
   effect_size,
   ci_lower,
   ci_upper,
@@ -139,7 +142,7 @@ ci_lower <- -0.6
 ci_upper <- -0.1
 
 # Create the plot
-effect.size.wiz::es_plot_v2(
+EffectVisR::es_plot_v2(
   effect_size,
   ci_lower,
   ci_upper,
@@ -150,7 +153,7 @@ effect.size.wiz::es_plot_v2(
 
 ## Summary
 
-The **effect.size.wiz** package is a simple and effective way to visualize effect sizes and their confidence intervals, with customisable design options for clarity. Whether you're preparing visualisations for a presentation or publication, the package provides intuitive functions for creating high-quality plots.
+The **EffectVisR** package is a simple and effective way to visualise effect sizes and their confidence intervals, with customisable design options for clarity. Whether you're preparing visualisations for a presentation or publication, the package provides intuitive functions for creating high-quality plots.
 
 ```{r}
 sessionInfo()
@@ -158,4 +161,4 @@ sessionInfo()
 
 ## Additional Resources
 
--   [GitHub Repository for effect.size.wiz](https://github.com/FSchwendinger/effect.size.wiz)
+-   [GitHub Repository for EffectVisR](https://github.com/FSchwendinger/EffectVisR)
