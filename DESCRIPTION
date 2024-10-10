@@ -1,12 +1,12 @@
-Package: effect.size.wiz
-Title: Customisable Effect Size Plots with Confidence Intervals for Scientific Presentations and Publications
+Package: EffectVisR
+Title: Customisable effect size plots with confidence intervals for scientific presentations and publications
 Version: 0.0.0.9000
 Authors@R: c(
     person(given = "Fabian", family = "Schwendinger", email = "schwendinger.fabian@gmail.com", role = c("aut", "cre")),
     person(given = "Eric", family = "Lichtenstein", email = "e.lichtenstein@unibas.ch", role = "aut")
     )
-Description: This package provides functions to create customized effect size plots, visualizing confidence intervals with a speedometer-like design. It simplifies the interpretation of effect sizes in relation to their confidence intervals.
-License: LGPL-3
+Description: This package provides functions to create customized effect size plots, visualising confidence intervals with a speedometer-like design. It simplifies the interpretation of effect sizes in relation to their confidence intervals.
+License: CC BY-NC 4.0
 Encoding: UTF-8
 Imports: 
     ggplot2,
@@ -18,5 +18,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-URL: https://github.com/FSchwendinger/effect.size.wiz
-BugReports: https://github.com/FSchwendinger/effect.size.wiz/issues
+URL: https://github.com/FSchwendinger/EffectVisR
+BugReports: https://github.com/FSchwendinger/EffectVisR/issues
