@@ -55,7 +55,7 @@
 
 utils::globalVariables(c("x", "y", "z"))
 
-es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
+es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = c("viridis", "magma", "plasma", "cividis", "grey"),
                              arrow_color = "black", reverse = FALSE, save_path = NULL,
                              axis_title_size = 12, axis_label_size = 10) {
 
@@ -82,6 +82,9 @@ es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
   # Calculate x and y positions for points in polar coordinates
   grid_data$x <- grid_data$r * cos(grid_data$th)
   grid_data$y <- grid_data$r * sin(grid_data$th)
+
+  # Get palette, allowing for partially matched inputs
+  palette <- match.arg(palette)
 
   # Function to get the color palette based on user input
   get_palette <- function(palette, n) {
@@ -119,7 +122,7 @@ es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
 
     # Add an arrow to represent the effect size with user-defined color
     ggplot2::annotate("segment", x = 0, y = 0, xend = cos(angle), yend = sin(angle),
-                      size = 2.5, color = arrow_color) +  # Thicker segment for needle
+                      linewidth = 2.5, color = arrow_color) +  # Thicker segment for needle
     ggplot2::annotate("point", x = cos(angle), y = sin(angle),
                       size = 5, color = arrow_color, shape = 21, fill = "white") +  # Circle at the tip
 
@@ -138,7 +141,7 @@ es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
     ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = "\u2264 -1", vjust = 2, size = axis_label_size) +  # -90° -> -1
 
     # Line at x = 0
-    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", size = 1) +
+    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", linewidth = 1) +
 
     # Add a color scale to the left of the plot
     ggplot2::geom_tile(data = data.frame(y = seq(-1, 1, length.out = 100), z = get_palette(palette, 100)),
