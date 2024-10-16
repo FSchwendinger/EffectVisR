@@ -22,6 +22,8 @@
 \item{axis_label_size}{Numeric, font size for the axis labels.}
 
 \item{reverse}{Logical, whether to reverse the color scale (default is FALSE).}
+
+\item{limit}{Numeric, indicating where the effect size plot is capped at each end (default is 1).}
 }
 \value{
 A ggplot2 object.
