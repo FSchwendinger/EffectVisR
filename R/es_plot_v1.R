@@ -18,6 +18,7 @@
 #' @param axis_title_size Numeric, font size for the axis title.
 #' @param axis_label_size Numeric, font size for the axis labels.
 #' @param reverse Logical, whether to reverse the color scale (default is FALSE).
+#' @param limit Numeric, indicating where the effect size plot is capped at each end (default is 1).
 #'
 #' @import ggplot2
 #' @importFrom viridisLite viridis
@@ -57,26 +58,34 @@ utils::globalVariables(c("x", "y", "z"))
 
 es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = c("viridis", "magma", "plasma", "cividis", "grey"),
                              arrow_color = "black", reverse = FALSE, save_path = NULL,
-                             axis_title_size = 12, axis_label_size = 10) {
+                             axis_title_size = 12, axis_label_size = 10, limit = 1) {
 
-  # Helper function to cap effect sizes and CIs within -1 to 1 range
-  cap_values <- function(x) {
-    pmin(pmax(x, -1), 1)
+  # Checks
+  if (effect_size > ci_upper || effect_size < ci_lower || ci_upper < ci_lower) {
+    stop("Upper confidence limit must be above the lower limit and above the effect size (and vice versa).")
   }
 
-  # Cap the effect size and CIs between -1 and 1
+  # Helper function to cap effect sizes and CIs within provided limits
+  cap_values <- function(x) {
+    pmin(pmax(x, -limit), limit)
+  }
+
+  # Limit must be positive
+  limit <- abs(limit)
+
+  # Cap the effect size and CIs between provided limits
   capped_effect_size <- cap_values(effect_size)
   capped_ci_lower <- cap_values(ci_lower)
   capped_ci_upper <- cap_values(ci_upper)
 
   # Map the capped values to angles between -90° and 90° (in radians)
-  angle <- capped_effect_size * (pi / 2)
-  ci_angle_lower <- capped_ci_lower * (pi / 2)
-  ci_angle_upper <- capped_ci_upper * (pi / 2)
+  angle <- capped_effect_size * (pi / (2 * limit))
+  ci_angle_lower <- capped_ci_lower * (pi / (2 * limit))
+  ci_angle_upper <- capped_ci_upper * (pi / (2 * limit))
 
   # Create a grid of points in the region defined by the CI
   r <- seq(0, 1, length.out = 250)  # Radial values
-  th <- seq(-pi / 2, pi / 2, length.out = 250)  # Full angle values for color gradient across entire range
+  th <- seq(-pi / (2 * limit), pi / (2 * limit), length.out = 250)  # Full angle values for color gradient across entire range
   grid_data <- expand.grid(r = r, th = th)
 
   # Calculate x and y positions for points in polar coordinates
@@ -124,34 +133,42 @@ es_plot_v1 <- function(effect_size, ci_lower, ci_upper, palette = c("viridis", "
     ggplot2::annotate("segment", x = 0, y = 0, xend = cos(angle), yend = sin(angle),
                       linewidth = 2.5, color = arrow_color) +  # Thicker segment for needle
     ggplot2::annotate("point", x = cos(angle), y = sin(angle),
-                      size = 5, color = arrow_color, shape = 21, fill = "white") +  # Circle at the tip
+                      size = 5, color = arrow_color, shape = 21, fill = "white")  # Circle at the tip
 
     # Axis lines along the radius using annotate
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/2), yend = sin(pi/2), linetype = "dashed", color = "gray") +  # 90°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/4), yend = sin(pi/4), linetype = "dashed", color = "gray") +  # 45°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(0), yend = sin(0), linetype = "dashed", color = "gray") +  # 0°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/4), yend = sin(-pi/4), linetype = "dashed", color = "gray") +  # -45°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/2), yend = sin(-pi/2), linetype = "dashed", color = "gray") +  # -90°
+    axis_vec <- seq(-limit + 0.5, limit - 0.5, by = 0.5)
+    axis_angle_vec <- seq(-pi/2 + 0.5 * pi/(2 * limit), pi/2 - 0.5 * pi/(2 * limit), length = length(axis_vec))
+    vjust_vec <- 1/2 - 1/1.15 * sin(axis_angle_vec)
+    hjust_vec <- 1/2 - 1/1.15 * cos(axis_angle_vec)
+
+
+    for (i in seq_along(axis_angle_vec)) {
+      p <- p + ggplot2::annotate("segment", x = 0, y = 0, xend = cos(axis_angle_vec[i]), yend = sin(axis_angle_vec[i]), linetype = "dashed", color = "gray")
+    }
+
+    p <- p + ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/2), yend = sin(pi/2), linetype = "dashed", color = "gray") +  # 90°
+      ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/2), yend = sin(-pi/2), linetype = "dashed", color = "gray")  # -90°
 
     # Labels at the end of each line using annotate
-    ggplot2::annotate("text", x = cos(pi/2), y = sin(pi/2), label = "\u2265 1", vjust = -1, size = axis_label_size) +  # 90° -> 1
-    ggplot2::annotate("text", x = cos(pi/4), y = sin(pi/4), label = "0.5", vjust = -1, size = axis_label_size) +  # 45° -> 0.5
-    ggplot2::annotate("text", x = cos(0), y = sin(0), label = "0", hjust = -1, size = axis_label_size) +  # 0° -> 0
-    ggplot2::annotate("text", x = cos(-pi/4), y = sin(-pi/4), label = "-0.5", vjust = 2, size = axis_label_size) +  # -45° -> -0.5
-    ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = "\u2264 -1", vjust = 2, size = axis_label_size) +  # -90° -> -1
+    for (i in seq_along(axis_angle_vec)) {
+      p <- p + ggplot2::annotate("text", x = cos(axis_angle_vec[i]), y = sin(axis_angle_vec[i]), label = axis_vec[i], hjust = hjust_vec[i], vjust = vjust_vec[i], size = axis_label_size)
+    }
+
+    p <- p + ggplot2::annotate("text", x = cos(pi/2), y = sin(pi/2), label = paste0("\u2265 ", limit), vjust = -1, size = axis_label_size) +  # 90° -> limit
+    ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = paste0("\u2264 ", -limit), vjust = 2, size = axis_label_size) +  # -90° -> -limit
 
     # Line at x = 0
     ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", linewidth = 1) +
 
     # Add a color scale to the left of the plot
     ggplot2::geom_tile(data = data.frame(y = seq(-1, 1, length.out = 100), z = get_palette(palette, 100)),
-                       ggplot2::aes(x = -0.05, y = y, fill = z), width = 0.05, height = 0.02) +  # Color scale as vertical line
+                       ggplot2::aes(x = -0.05, y = y, fill = z), width = 0.06, height = 0.02) +  # Color scale as vertical line
 
     ggplot2::expand_limits(x = c(-1.2, 1.2), y = c(-1.2, 1.2)) +  # Adjust plot limits to fit the color scale
 
     ggplot2::coord_fixed() +
     ggplot2::theme_void() +
-    ggplot2::annotate("text", x = -.2, y = 0, label = "Effect size (95% CI)", angle = 90, hjust = 0.5, size = axis_title_size) +
+    ggplot2::annotate("text", x = -.21, y = 0, label = "Effect size (95% CI)", angle = 90, hjust = 0.5, size = axis_title_size) +
     ggplot2::theme(legend.position = "none")
 
   # Save the plot to the specified path with transparent background, if provided
