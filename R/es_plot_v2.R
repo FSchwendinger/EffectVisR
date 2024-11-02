@@ -18,6 +18,7 @@
 #' @param axis_title_size Numeric, font size for the axis title.
 #' @param axis_label_size Numeric, font size for the axis labels.
 #' @param reverse Logical, whether to reverse the color scale (default is FALSE).
+#' @param limit Numeric, indicating where the effect size plot is capped at each end (default is 1).
 #'
 #' @import ggplot2
 #' @importFrom viridisLite viridis
@@ -56,13 +57,21 @@
 
 utils::globalVariables(c("x", "y", "z"))
 
-es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
-                                      arrow_color = "black", reverse = FALSE,
-                                      save_path = NULL, axis_title_size = 12, axis_label_size = 10) {
+es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = c("viridis", "magma", "plasma", "cividis", "grey"),
+                       arrow_color = "black", reverse = FALSE,
+                       save_path = NULL, axis_title_size = 12, axis_label_size = 10, limit = 1) {
+
+  # Checks
+  if (effect_size > ci_upper || effect_size < ci_lower || ci_upper < ci_lower) {
+    stop("Upper confidence limit must be above the lower limit and above the effect size (and vice versa).")
+  }
+
+  # Limit must be positive
+  limit <- abs(limit)
 
   # Helper function to cap effect sizes and CIs within -1 to 1 range
   cap_values <- function(x) {
-    pmin(pmax(x, -1), 1)
+    pmin(pmax(x, -limit), limit)
   }
 
   # Cap the effect size and CIs between -1 and 1
@@ -71,11 +80,11 @@ es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
   capped_ci_upper <- cap_values(ci_upper)
 
   # Map the capped values to angles between -90° and 90° (in radians)
-  angle <- capped_effect_size * (pi / 2)
-  ci_angle_lower <- capped_ci_lower * (pi / 2)
-  ci_angle_upper <- capped_ci_upper * (pi / 2)
+  angle <- capped_effect_size * (pi / (2 * limit))
+  ci_angle_lower <- capped_ci_lower * (pi / (2 * limit))
+  ci_angle_upper <- capped_ci_upper * (pi / (2 * limit))
 
-  # Create a grid of points only between CI angles
+  # Create a grid of points in the region defined by the CI
   r <- seq(0, 1, length.out = 250)  # Radial values
   th <- seq(ci_angle_lower, ci_angle_upper, length.out = 250)  # Angle values between CI
   grid_data <- expand.grid(r = r, th = th)
@@ -83,6 +92,9 @@ es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
   # Calculate x and y positions for points in polar coordinates
   grid_data$x <- grid_data$r * cos(grid_data$th)
   grid_data$y <- grid_data$r * sin(grid_data$th)
+
+  # Get palette, allowing for partially matched inputs
+  palette <- match.arg(palette)
 
   # Function to get the color palette based on user input
   get_palette <- function(palette, n) {
@@ -118,28 +130,35 @@ es_plot_v2 <- function(effect_size, ci_lower, ci_upper, palette = "viridis",
 
     # Add an arrow to represent the effect size with user-defined color
     ggplot2::annotate("segment", x = 0, y = 0, xend = cos(angle), yend = sin(angle),
-                      size = 2.5, color = arrow_color) +  # Thicker segment for needle
+                      linewidth = 2.5, color = arrow_color) +  # Thicker segment for needle
     ggplot2::annotate("point", x = cos(angle), y = sin(angle),
-                      size = 5, color = arrow_color, shape = 21, fill = "white") +  # Circle at the tip
+                      size = 5, color = arrow_color, shape = 21, fill = "white")  # Circle at the tip
 
-    # Axis lines along the radius using annotate
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/2), yend = sin(pi/2), linetype = "dashed", color = "gray") +  # 90°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/4), yend = sin(pi/4), linetype = "dashed", color = "gray") +  # 45°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(0), yend = sin(0), linetype = "dashed", color = "gray") +  # 0°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/4), yend = sin(-pi/4), linetype = "dashed", color = "gray") +  # -45°
-    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/2), yend = sin(-pi/2), linetype = "dashed", color = "gray") +  # -90°
+  # Axis lines along the radius using annotate
+  axis_vec <- seq(-limit + 0.5, limit - 0.5, by = 0.5)
+  axis_angle_vec <- seq(-pi/2 + 0.5 * pi/(2 * limit), pi/2 - 0.5 * pi/(2 * limit), length = length(axis_vec))
+  vjust_vec <- 1/2 - 1/1.15 * sin(axis_angle_vec)
+  hjust_vec <- 1/2 - 1/1.15 * cos(axis_angle_vec)
 
-    # Labels at the end of each line using annotate
-    ggplot2::annotate("text", x = cos(pi/2), y = sin(pi/2), label = "\u2265 1", vjust = -1, size = axis_label_size) +  # 90° -> 1
-    ggplot2::annotate("text", x = cos(pi/4), y = sin(pi/4), label = "0.5", vjust = -1, size = axis_label_size) +  # 45° -> 0.5
-    ggplot2::annotate("text", x = cos(0), y = sin(0), label = "0", hjust = -1, size = axis_label_size) +  # 0° -> 0
-    ggplot2::annotate("text", x = cos(-pi/4), y = sin(-pi/4), label = "-0.5", vjust = 2, size = axis_label_size) +  # -45° -> -0.5
-    ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = "\u2264 -1", vjust = 2, size = axis_label_size) +  # -90° -> -1
+  for (i in seq_along(axis_angle_vec)) {
+    p <- p + ggplot2::annotate("segment", x = 0, y = 0, xend = cos(axis_angle_vec[i]), yend = sin(axis_angle_vec[i]), linetype = "dashed", color = "gray")
+  }
+
+  p <- p + ggplot2::annotate("segment", x = 0, y = 0, xend = cos(pi/2), yend = sin(pi/2), linetype = "dashed", color = "gray") +  # 90°
+    ggplot2::annotate("segment", x = 0, y = 0, xend = cos(-pi/2), yend = sin(-pi/2), linetype = "dashed", color = "gray")  # -90°
+
+  # Labels at the end of each line using annotate
+  for (i in seq_along(axis_angle_vec)) {
+    p <- p + ggplot2::annotate("text", x = cos(axis_angle_vec[i]), y = sin(axis_angle_vec[i]), label = axis_vec[i], hjust = hjust_vec[i], vjust = vjust_vec[i], size = axis_label_size)
+  }
+
+  p <- p + ggplot2::annotate("text", x = cos(pi/2), y = sin(pi/2), label = paste0("\u2265 ", limit), vjust = -1, size = axis_label_size) +  # 90° -> limit
+    ggplot2::annotate("text", x = cos(-pi/2), y = sin(-pi/2), label = paste0("\u2264 ", -limit), vjust = 2, size = axis_label_size) +  # -90° -> -limit
 
     # Line at x = 0
-    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", size = 1) +
+    ggplot2::annotate("segment", x = 0, xend = 0, y = -1, yend = 1, color = "black", linewidth = 1) +
 
-    expand_limits(x = c(-1.2, 1.2), y = c(-1.2, 1.2)) +
+    ggplot2::expand_limits(x = c(-1.2, 1.2), y = c(-1.2, 1.2)) +
 
     ggplot2::coord_fixed() +
     ggplot2::theme_void() +

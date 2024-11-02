@@ -113,6 +113,8 @@ EffectVisR::es_plot_v1(
 
 -   `reverse`: Logical flag to reverse the colour scale.
 
+-   `limit`: Numeric value indicating the limits of the plot. The limits will be taken as -|limit| and +|limit|.
+
 ## Usage of `es_plot_v2`
 
 The `es_plot_v2` function adds a gradient shading within the 95% confidence interval, highlighting the distance from the effect size.

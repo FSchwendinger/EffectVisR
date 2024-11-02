@@ -126,6 +126,8 @@ several parameters:
 - **axis_title_size, axis_label_size**: Adjust font sizes for axis
   titles and labels.
 
+- **limit**: Set the limits of effect sizes displayed in the plot.
+
 ### Example: Saving the Plot
 
 You can save your plot with a transparent background using the
