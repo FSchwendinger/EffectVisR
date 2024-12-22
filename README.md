@@ -1,11 +1,10 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14544022.svg)](https://doi.org/10.5281/zenodo.14544022)
 ![License](https://img.shields.io/badge/license-CC--BY--NC%204.0-blue)
 ![GitHub
 Release](https://img.shields.io/github/v/release/FSchwendinger/EffectVisR)
-[![GitHub
-Install](https://img.shields.io/badge/install-GitHub-blue)](https://github.com/FSchwendinger/EffectVisR)
 
 # EffectVisR
 
@@ -189,6 +188,15 @@ provided that appropriate credit is given. See the
 
 For more details, see [Creative Commons BY-NC
 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+
+## Citation
+
+If you use this R-package, please cite it as follows:
+
+Schwendinger, F., & Lichtenstein, E. (2024). EffectVisR - Customisable
+effect size plots with confidence intervals for scientific presentations
+and publications (v1.0.0). Zenodo.
+<https://doi.org/10.5281/zenodo.14544022>
 
 ## Contributors
 
