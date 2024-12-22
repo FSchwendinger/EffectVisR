@@ -145,7 +145,7 @@ es_plot_v2 <- function(effect_size,
                        area_arc = 0) {
 
 
-  # Helper function to scale values linearly
+  # Function that linearly scales values of x from range [min, max] to range [a, b]
   scale_lin <- function(x, a, b, min, max) {
     (((b - a) * (x - min)) / (max - min)) + a
   }
@@ -187,11 +187,8 @@ es_plot_v2 <- function(effect_size,
   # Limit must be positive
   limit <- abs(limit)
 
-  # Apply log transformation if needed
-  if (eff_type == "log") {
-    effect_size <- log(effect_size)
-    ci_lower <- log(ci_lower)
-    ci_upper <- log(ci_upper)
+  # Because axis is on the log scale, transform limit to log scale too
+  if (eff_type %in% "log") {
     limit <- log(limit)
   }
 
@@ -470,5 +467,5 @@ es_plot_v2 <- function(effect_size,
   return(p)
 }
 
-# es_plot_v2(0.9, 0.2, 2, eff_type = "log", area_arc = 0.95, limit = 20, num_labels = 3, palette = "RdYlGn")
+# es_plot_v2(effect_size = 0.9, 0.2, 2, eff_type = "log", area_arc = 0.95, limit = 20, num_labels = 3, palette = "RdYlGn")
 
