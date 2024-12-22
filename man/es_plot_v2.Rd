@@ -2,63 +2,140 @@
 % Please edit documentation in R/es_plot_v2.R
 \name{es_plot_v2}
 \alias{es_plot_v2}
-\title{Effect Size Plot - Version 2}
+\title{Visualize Effect Sizes with Confidence Intervals in Polar Plot Halves
+Effect Size Plot - Version 2}
 \arguments{
 \item{effect_size}{Numeric, the estimated effect size.}
 
-\item{ci_lower}{Numeric, the lower bound of the 95\% confidence interval.}
+\item{ci_lower}{Numeric. The lower bound of the 95\% confidence interval. Must be less than \code{ci_upper}.}
 
-\item{ci_upper}{Numeric, the upper bound of the 95\% confidence interval.}
+\item{ci_upper}{Numeric. The upper bound of the 95\% confidence interval. Must be greater than \code{ci_lower}.}
 
-\item{palette}{Character, color palette to use for the confidence range. Options are
-"viridis", "magma", "plasma", "cividis", or "grey".}
+\item{palette}{Character. The color palette to use for the confidence range. Options are:
+\itemize{
+\item \code{"viridis"}: A perceptually uniform colormap.
+\item \code{"magma"}: A colormap suitable for perceptual uniformity.
+\item \code{"plasma"}: A high-contrast colormap.
+\item \code{"cividis"}: A colormap optimized for colorblind users.
+\item \code{"grey"}: A greyscale palette.
+\item \code{"RdYlGn"}: A diverging palette from red to green.
+Default is \code{"grey"}.
+}}
 
-\item{arrow_color}{Character, color for the arrow indicating the effect size.}
+\item{arrow_color}{Character. The color of the arrow representing the effect size. Default is "black".}
 
-\item{save_path}{Character, path to save the plot. If NULL, the plot will not be saved.}
+\item{save_path}{Character. Path to save the plot as an image. If \code{NULL} (default), the plot is not saved.}
 
-\item{axis_title_size}{Numeric, font size for the axis title.}
+\item{axis_title_size}{Numeric. Font size for the axis title. Default is 12.}
 
-\item{axis_label_size}{Numeric, font size for the axis labels.}
+\item{axis_label_size}{Numeric. Font size for the axis labels. Default is 10.}
 
-\item{reverse}{Logical, whether to reverse the color scale (default is FALSE).}
+\item{reverse}{Logical. If \code{TRUE}, reverses the color scale. Default is \code{FALSE}.}
 
-\item{limit}{Numeric, indicating where the effect size plot is capped at each end (default is 1).}
+\item{limit}{Numeric. Specifies the range for capping the effect size plot on each end.
+For logarithmic scales, this represents the maximum value after log-transformation. Default is 1.}
+
+\item{eff_type}{Character. Specifies the scale of the effect size:
+\itemize{
+\item \code{"linear"}: Effect sizes are interpreted directly.
+\item \code{"log"}: Effect sizes are log-transformed (e.g., odds ratios, hazard ratios).
+Default is \code{"linear"}.
+}}
+
+\item{num_labels}{Numeric (1, 2, or 3). Specifies the number of axis labels to display. Default is 1.}
+
+\item{area_arc}{Numeric. Specifies the proportion of the CI fan to display.
+\itemize{
+\item \code{0}: Displays a full circular fan.
+\item Values closer to 1 produce narrower arcs.
+Must be within the range \verb{[0, 1)}. Default is \code{0}.
+}}
 }
 \value{
-A ggplot2 object.
+A \code{ggplot2} object representing the effect size plot with confidence intervals. The plot
+can be further customized or saved using \code{ggplot2} functions.
 }
 \description{
-Creates a plot showing an arrow representing an effect size, with a colored range
-representing the 95\% confidence interval (CI). The color transition is smooth across the CI,
-and a dashed white line separates positive and negative effects. The plot provides a clear
-visual summary of the effect size and its confidence range.
+This function creates a polar plot half showing an arrow representing an effect size
+and a colored fan representing the 95\% confidence interval (CI). The plot supports both linear and logarithmic effect
+sizes, allowing visualization of metrics such as odds ratios, hazard ratios, or standardized effect sizes.
+A smooth color transition across the CI enhances interpretability, and the plot provides a clear visual
+summary of the effect size and its uncertainty.
+}
+\details{
+Shading in Version 2
+How it works: In v2, the shading varies based on the distance from the effect size (estimate):
+The shading is darker near the effect size, representing higher certainty around the estimate.
+The shading becomes lighter as you move further away from the effect size within the CI range.
+Why this is useful: This method emphasizes the most likely region of the CI (near the estimate), while visually de-emphasizing areas near the CI boundaries.
+When to choose v2:
+If you want to focus attention on the precision of the estimate.
+For a more informative and intuitive visualization of the CI's relationship to the effect size.
 }
 \examples{
-# Example usage of es_plot_v2
+# Minimalistic Example: Create a basic plot with default settings
 library(EffectVisR)
-
-# Define the effect size and confidence intervals
-effect_size <- -0.3
-ci_lower <- -0.6
-ci_upper <- -0.1
-
-# Create the plot using the "grey" color palette
+EffectVisR::es_plot_v2(
+  effect_size = 0.5,
+  ci_lower = 0.2,
+  ci_upper = 0.8
+)
+# Example 1: Create a plot with a linear effect size and default settings
+effect_size <- 0.5
+ci_lower <- 0.2
+ci_upper <- 0.8
 EffectVisR::es_plot_v2(
   effect_size = effect_size,
   ci_lower = ci_lower,
   ci_upper = ci_upper,
-  palette = "grey",
-  arrow_color = "darkred"
+  palette = "viridis",
+  arrow_color = "blue",
+  save_path = NULL,          # Do not save the plot
+  axis_title_size = 12,      # Default axis title size
+  axis_label_size = 10,      # Default axis label size
+  reverse = FALSE,           # Do not reverse the palette
+  limit = 1,                 # Default effect size limit
+  eff_type = "linear",       # Use a linear scale
+  num_labels = 1,            # Single label on the axis
+  area_arc = 0               # Full fan
 )
-
-# Create the plot using the "plasma" color palette and save the plot
+# Example 2: Create a plot with a logarithmic effect size and custom settings
 EffectVisR::es_plot_v2(
-  effect_size = -0.3,
+  effect_size = 1.5,         # Effect size on a log scale
+  ci_lower = 1.2,
+  ci_upper = 2.0,
+  palette = "RdYlGn",        # Use the "RdYlGn" palette
+  arrow_color = "darkred",   # Use a dark red arrow
+  save_path = "log_effect_size_plot.png",  # Save the plot
+  axis_title_size = 14,      # Larger axis title font size
+  axis_label_size = 12,      # Larger axis label font size
+  reverse = TRUE,            # Reverse the color palette
+  limit = 10,                # Custom effect size limit
+  eff_type = "log",          # Use a logarithmic scale
+  num_labels = 3,            # Display three labels
+  area_arc = 0.95            # Narrow arc for CI area
+)
+# Example 3: Customizing the color scale with a grey palette
+EffectVisR::es_plot_v2(
+  effect_size = -0.3,        # Negative effect size
   ci_lower = -0.6,
   ci_upper = -0.1,
-  palette = "plasma",
-  arrow_color = "darkred",
-  save_path = "effect_size_plot_v2.png"
+  palette = "grey",          # Use a greyscale palette
+  arrow_color = "black",     # Black arrow
+  save_path = NULL,          # Do not save the plot
+  axis_title_size = 10,      # Smaller axis title font
+  axis_label_size = 8,       # Smaller axis label font
+  reverse = FALSE,           # Do not reverse the palette
+  limit = 1,                 # Default limit
+  eff_type = "linear",       # Use a linear scale
+  num_labels = 2,            # Two labels on the axis
+  area_arc = 0.5             # Semi-circular arc for CI area
 )
+}
+\seealso{
+\itemize{
+\item \href{https://ggplot2.tidyverse.org/}{ggplot2} for additional plotting options.
+\item \href{https://cran.r-project.org/package=viridisLite}{viridisLite} for color palette details.
+\item \href{https://github.com/FSchwendinger/EffectVisR}{EffectVisR} for related visualization tools.
+}
 }

@@ -1,9 +1,10 @@
 Package: EffectVisR
 Title: Customisable effect size plots with confidence intervals for scientific presentations and publications
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: c(
     person(given = "Fabian", family = "Schwendinger", email = "schwendinger.fabian@gmail.com", role = c("aut", "cre")),
-    person(given = "Eric", family = "Lichtenstein", email = "e.lichtenstein@unibas.ch", role = "aut")
+    person(given = "Eric", family = "Lichtenstein", email = "e.lichtenstein@unibas.ch", role = "aut"),
+    person(given = "Denis", family = "Infanger", email = "denis.infanger@unibas.ch", role = "ctb")
     )
 Description: This package provides functions to create customized effect size plots, visualising confidence intervals with a speedometer-like design. It simplifies the interpretation of effect sizes in relation to their confidence intervals.
 License: CC BY-NC 4.0
@@ -16,7 +17,8 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr
 URL: https://github.com/FSchwendinger/EffectVisR
 BugReports: https://github.com/FSchwendinger/EffectVisR/issues
