@@ -21,6 +21,7 @@ The **EffectVisR** package provides tools for visualising effect sizes and their
 
 This vignette will guide you through how to use the functions in the package to create compelling visualisations for effect sizes and confidence intervals.
 
+This package depends on ggplot2 (MIT License) for visualisation.
 
 ## Features of the Package
 

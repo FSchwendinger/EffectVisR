@@ -1,0 +1,14 @@
+---
+title: "NOTICE"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This software is licensed under the MIT License. See the LICENSE file for details.
+
+If you use this package in a scientific publication, please cite: Schwendinger, F., & Lichtenstein, E. (2024). EffectVisR - Customisable effect size plots with confidence intervals for scientific presentations and publications (v1.0.0). Zenodo. <https://doi.org/10.5281/zenodo.14544022>
+
+This package makes use of ggplot2 (MIT License). See <https://ggplot2.tidyverse.org> for more details.

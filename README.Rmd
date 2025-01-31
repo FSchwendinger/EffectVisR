@@ -14,13 +14,14 @@ knitr::opts_chunk$set(
 ```
 
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14544022.svg)](https://doi.org/10.5281/zenodo.14544022) ![License](https://img.shields.io/badge/license-CC--BY--NC%204.0-blue) ![GitHub Release](https://img.shields.io/github/v/release/FSchwendinger/EffectVisR)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14544022.svg)](https://doi.org/10.5281/zenodo.14544022)  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) ![GitHub Release](https://img.shields.io/github/v/release/FSchwendinger/EffectVisR)
 
 # EffectVisR
+<img src="man/figures/hex_sticker.png" width="150" />
 
 # Overview
 
-The **EffectVisR** package provides functions to easily visualise effect sizes and their 95% confidence intervals. It offers two flexible plotting functions, each tailored to highlight confidence intervals in different ways:
+The **EffectVisR** package (pronounced Effect Wizard) provides functions to easily visualise effect sizes and their 95% confidence intervals. It offers two flexible plotting functions, each tailored to highlight confidence intervals in different ways:
 
 -   `es_plot_v1`: Highlights confidence intervals with distinct gradient colours.
 -   `es_plot_v2`: Emphasises the closeness of confidence intervals to the effect size using gradient shading.
@@ -159,13 +160,16 @@ EffectVisR::es_plot_v1(
 )
 ```
 
-## License ![License](https://img.shields.io/badge/license-CC--BY--NC%204.0-blue)
+## License  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-This package is licensed under the Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) License. You are free to use, share, and modify the work for non-commercial purposes, provided that appropriate credit is given. See the [LICENSE](LICENSE-CC-BY-NC-4.0.md) file for more information.
+This package is licensed under the MIT License. You are free to use, share, and modify the work with no restrictions, provided that appropriate credit is given.
 
-For more details, see [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+See the LICENSE file for more details.
+For more information, see the MIT License.
 
 ## Citation
+
+This package makes use of ggplot2 (licensed under MIT). See https://ggplot2.tidyverse.org for more details.
 
 If you use this R-package, please cite it as follows:
 

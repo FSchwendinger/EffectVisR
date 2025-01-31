@@ -7,7 +7,7 @@ Authors@R: c(
     person(given = "Denis", family = "Infanger", email = "denis.infanger@unibas.ch", role = "ctb")
     )
 Description: This package provides functions to create customized effect size plots, visualising confidence intervals with a speedometer-like design. It simplifies the interpretation of effect sizes in relation to their confidence intervals.
-License: CC BY-NC 4.0
+License: License: MIT + file LICENSE
 Encoding: UTF-8
 Imports: 
     ggplot2,
